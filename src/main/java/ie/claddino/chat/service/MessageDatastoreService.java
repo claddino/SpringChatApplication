@@ -16,6 +16,7 @@ public void sendMessageToThisUser(String receiverName, String message, String se
 * This is the method to be used to get the messages
 * of a logged user by passing user's username as loggedUserName .
 */
+
 public List getMyLatestMessages(String loggedUserName);
 /**
 * This is the method to be used to get the previous messages

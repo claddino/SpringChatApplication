@@ -54,6 +54,14 @@ changeOnlineStatus(request);
 		  modeluserhome.addObject("title", "Spring Security Login Form - Database Authentication");
 		  modeluserhome.addObject("message", "This page is for ROLE_ADMIN only!");
 		  modeluserhome.setViewName("userhome");
+		  
+		  
+		  //stops the userhome being cached so that user cant click back after logging out.
+		  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+	        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+	        response.setDateHeader("Expires", 0); // Proxies.
+	        
+	        
 		  return modeluserhome;
 		
         }

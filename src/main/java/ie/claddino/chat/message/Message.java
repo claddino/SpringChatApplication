@@ -57,8 +57,10 @@ public class Message {
                 public Date getTime() {
                                 return time;
                 }
-                public void setTime(Date time) {
-                                this.time = time;
-                }
+             
+				public void setTime(Date date) {
+					// TODO Auto-generated method stub
+				     this.time = date;
+				}
                
 }

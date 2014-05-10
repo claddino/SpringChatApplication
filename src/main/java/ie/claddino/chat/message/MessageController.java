@@ -48,7 +48,7 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      
                      //Gets the users name from the principal
                      String loggedUserName = auth.getName();
-                   
+                     @SuppressWarnings("unchecked")
                      List<Object> messages = messageDatastoreService.getMyLatestMessages(loggedUserName);
                     
                      response.setContentType("json");
@@ -72,7 +72,7 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      
                      //Gets the users name from the principal
                      String loggedUserName = auth.getName();
-                    
+                     @SuppressWarnings("unchecked")
                      List<Object> messages = messageDatastoreService.getMyPrevMessages(loggedUserName, minVal);
                     
                      response.setContentType("json");

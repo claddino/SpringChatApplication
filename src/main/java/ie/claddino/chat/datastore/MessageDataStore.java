@@ -3,7 +3,7 @@ package ie.claddino.chat.datastore;
 import ie.claddino.chat.message.Message;
 import ie.claddino.chat.service.MessageDatastoreService;
 
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 
@@ -31,19 +31,12 @@ public class MessageDataStore implements MessageDatastoreService {
 	public void sendMessageToThisUser(String receiverName, String message,
 			String senderName) {
 		Message message2 = new Message();
-		message2.setId(78979);
 		message2.setMessage(message);
 		message2.setReceiverName(receiverName);
 		message2.setSenderName(senderName);
-		Calendar calendar = Calendar.getInstance();
 		Date date = new Date();
 		
-		date.setDate(date.getDay());
-		date.setMonth(date.getMonth() + 1);
-		date.setYear(date.getYear());
-		date.setMinutes(date.getMinutes());
-		date.setSeconds(date.getSeconds());
-		date.setHours(date.getHours());
+		
 		message2.setTime(date);
 	
 		sessionFactory.getCurrentSession().save(message2);
@@ -57,6 +50,7 @@ public class MessageDataStore implements MessageDatastoreService {
 				.addOrder(Order.desc("id")).setMaxResults(5);
 		
 		System.out.println("Get my message critera" + criteria.toString());
+		  @SuppressWarnings("unchecked")
 		List<Message> messageList = criteria.list();
 	
 		return messageList;
@@ -69,6 +63,7 @@ public class MessageDataStore implements MessageDatastoreService {
 				.add(Restrictions.like("receiverName", loggedUserName))
 				.add(Restrictions.lt("id", Integer.parseInt(minVal)))
 				.addOrder(Order.desc("id")).setMaxResults(5);
+		  @SuppressWarnings("unchecked")
 		List<Message> messageList = criteria.list();
 		
 		return messageList;
@@ -82,6 +77,7 @@ public class MessageDataStore implements MessageDatastoreService {
 				.add(Restrictions.like("receiverName", loggedUserName))
 				.add(Restrictions.gt("id", Integer.parseInt(maxVal)))
 				.addOrder(Order.desc("id")).setMaxResults(5);
+		  @SuppressWarnings("unchecked")
 		List<Message> messageList = criteria.list();
 		return messageList;
 	}
