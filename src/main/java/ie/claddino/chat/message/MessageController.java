@@ -1,6 +1,5 @@
 package ie.claddino.chat.message;
 
-import ie.claddino.chat.service.JavaPojo_JSONCaster;
 import ie.claddino.chat.service.MessageDatastoreService;
 
 import java.io.IOException;
@@ -15,6 +14,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 @Controller
@@ -52,13 +54,13 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      List<Object> messages = messageDatastoreService.getMyLatestMessages(loggedUserName);
                     
                      response.setContentType("json");
-                     JavaPojo_JSONCaster pojo_JSONCaster = new JavaPojo_JSONCaster();
+                     Gson gson = new GsonBuilder().create();
                      try {
-                                     response.getWriter().write(pojo_JSONCaster.convert_ThisPojoList_To_JSONArray(messages, Message.class).toString());
+                    	 response.getWriter().write(gson.toJsonTree(messages).getAsJsonArray().toString());
                      } catch (IOException e) {
                                      e.printStackTrace();
                      }
-                     System.out.println(pojo_JSONCaster.convert_ThisPojoList_To_JSONArray(messages, Message.class).toString());
+                     System.out.println(gson.toJsonTree(messages).getAsJsonArray());
      }
      
      @RequestMapping("/getPrev")
@@ -76,9 +78,9 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      List<Object> messages = messageDatastoreService.getMyPrevMessages(loggedUserName, minVal);
                     
                      response.setContentType("json");
-                     JavaPojo_JSONCaster pojo_JSONCaster = new JavaPojo_JSONCaster();
+                     Gson gson = new GsonBuilder().create();
                      try {
-                                     response.getWriter().write(pojo_JSONCaster.convert_ThisPojoList_To_JSONArray(messages, Message.class).toString());
+                    	 response.getWriter().write(gson.toJsonTree(messages).getAsJsonArray().toString());
                      } catch (IOException e) {
                                      e.printStackTrace();
                      }

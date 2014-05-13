@@ -1,6 +1,5 @@
 package ie.claddino.chat.user;
 
-import ie.claddino.chat.service.JavaPojo_JSONCaster;
 import ie.claddino.chat.service.UserDatastoreService;
 
 import java.io.IOException;
@@ -14,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 @Controller
 public class UserController {
 	 @Autowired
@@ -31,12 +33,14 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      //Gets the users name from the principal
                      String loggedUserName = auth.getName();
                     
-                     List<Object> onlineUsers = userDatastoreService.getAllUsers(loggedUserName);
+                     List<Object> allUsers = userDatastoreService.getAllUsers(loggedUserName);
                     
                      response.setContentType("json");
-                     JavaPojo_JSONCaster pojo_JSONCaster = new JavaPojo_JSONCaster();
+                     
+                     Gson gson = new GsonBuilder().create();
                      try {
-                                     response.getWriter().write(pojo_JSONCaster.convert_ThisPojoList_To_JSONArray(onlineUsers, UserBean.class).toString());
+                    	 response.getWriter().write(gson.toJsonTree(allUsers).getAsJsonArray().toString());
+                                   
                      } catch (IOException e) {
                                      e.printStackTrace();
                      }
@@ -58,9 +62,9 @@ SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING
                      List<Object> onlineUsers = userDatastoreService.getOnlineUsers(loggedUserName);
                     
                      response.setContentType("json");
-                     JavaPojo_JSONCaster pojo_JSONCaster = new JavaPojo_JSONCaster();
+                     Gson gson = new GsonBuilder().create();
                      try {
-                                     response.getWriter().write(pojo_JSONCaster.convert_ThisPojoList_To_JSONArray(onlineUsers, UsersOnline.class).toString());
+                    	 response.getWriter().write(gson.toJsonTree(onlineUsers).getAsJsonArray().toString());
                      } catch (IOException e) {
                                      e.printStackTrace();
                      }
