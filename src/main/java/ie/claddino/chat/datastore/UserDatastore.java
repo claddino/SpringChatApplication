@@ -6,10 +6,14 @@ import ie.claddino.chat.user.UsersOnline;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,5 +82,39 @@ public class UserDatastore implements UserDatastoreService {
 			onlineUsers.setLiveStatus(status);
 			sessionFactory.getCurrentSession().update(onlineUsers);
 		}
+	}
+	
+	/**
+	 * Called when user is logging in or logging out.
+	 * if user logs in online status will be changed to 1 and to 0 when user is logging out
+	 */
+	@Transactional
+	@Override
+	public void changeOnlineStatus(HttpServletRequest request) {
+		SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+		        
+		        Authentication auth=ctx.getAuthentication();
+		        
+		        
+		        //Gets the users name from the principal
+		        String loggedUserName = auth.getName();
+		    	Criteria criteria = sessionFactory.openSession()
+						.createCriteria(UsersOnline.class)
+						.add(Restrictions.eq("userId", loggedUserName));
+		    	
+		    	//if criteria doesnt return anything it means user isnt online so 
+		    	//the users online status gets set to 1 meaning that they are now logged in
+				if (criteria.list().size() == 0) {
+					UsersOnline onlineUsers = new UsersOnline();
+					onlineUsers.setLiveStatus(1);
+					onlineUsers.setUserId(loggedUserName);
+					sessionFactory.getCurrentSession().save(onlineUsers);
+				} else {
+					UsersOnline onlineUsers = (UsersOnline) criteria.list().get(0);
+					onlineUsers.setLiveStatus(0);
+					sessionFactory.getCurrentSession().update(onlineUsers);
+				}
+		        
+		      
 	}
 }

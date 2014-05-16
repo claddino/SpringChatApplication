@@ -34,4 +34,6 @@ public class UserDAO {
 		sessionFactory.getCurrentSession().save(user);
 	}
 
+	
+	
 }

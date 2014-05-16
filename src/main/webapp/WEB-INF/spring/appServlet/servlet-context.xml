@@ -22,7 +22,11 @@
 
 	
 	
-	
+	 <aop:aspectj-autoproxy>
+        <aop:include name="AOPLogger"/>
+    </aop:aspectj-autoproxy>
+
+    <beans:bean id="AOPLogger" class="ie.claddino.chat.utilities.AOPLogger"/>
 	
         
 	

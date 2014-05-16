@@ -33,10 +33,7 @@ public class RegistrationController {
 	@Autowired private UserDAO userDAO;
 	// Invoked on every request
 
-	@ModelAttribute
-	public void ajaxAttribute(WebRequest request, Model model) {
-		model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(request));
-	}
+
 
 	
 
@@ -46,11 +43,11 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public void form() {
+	public void regform() {
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public String processSubmit(@Valid UserBean user, BindingResult result, 
+	public String registrationSubmit(@Valid UserBean user, BindingResult result, 
 								@ModelAttribute("ajaxRequest") boolean ajaxRequest, 
 								Model model, RedirectAttributes redirectAttrs) {
 		logger.info("Processing New User");
@@ -59,7 +56,6 @@ public class RegistrationController {
 		}
 		userDAO.addUser(user);
 		
-		System.out.println("Saving User object");
 	
 		String message = "Form submitted successfully.  Bound " + user;
 		// Success response handling

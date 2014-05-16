@@ -34,9 +34,9 @@ public class LoginController {
     
     
     
-  //after login button press
+    //after login button press
     @RequestMapping(value="/",method = RequestMethod.GET)
-	public String list(Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String returnuserhome(Model model, HttpServletRequest request, HttpServletResponse response) {
     	changeOnlineStatus(request);
         	
     		return "userhome";
@@ -47,7 +47,7 @@ public class LoginController {
 	
  
 	@RequestMapping(value="/userhome", method = RequestMethod.GET)
-	public ModelAndView  showuserhome (Model model, HttpServletRequest request, HttpServletResponse response) {
+	public  ModelAndView  userhome ( Model model,  HttpServletRequest request,  HttpServletResponse response) {
  
 changeOnlineStatus(request);
 		  ModelAndView modeluserhome = new ModelAndView();
@@ -71,9 +71,10 @@ changeOnlineStatus(request);
 
 	/**
 	 * Called when user is logging in or logging out.
-	 * if user logs in online status will be changed to 1 and to 0 when user is logging out
+	 * if user logs in online status will be changed to 1 and to 0 when
+	 *  user is logging out
 	 */
-	private void changeOnlineStatus(HttpServletRequest request) {
+	private void changeOnlineStatus( HttpServletRequest request) {
 		SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
 		        
 		        Authentication auth=ctx.getAuthentication();
@@ -92,8 +93,8 @@ changeOnlineStatus(request);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-		@RequestParam(value = "logout", required = false) String logout) {
+	public  ModelAndView login(@RequestParam(value = "error", required = false)  String error,
+		@RequestParam(value = "logout", required = false)  String logout) {
  
 	  ModelAndView model = new ModelAndView();
 	  if (error != null) {
@@ -110,7 +111,7 @@ changeOnlineStatus(request);
 	}
 	
 	 @RequestMapping("/removeonlinestatus")
-    public void getAllUsers(HttpServletRequest request, HttpServletResponse response) {
+	public  void removeonlinestatus( HttpServletRequest request,  HttpServletResponse response) {
                    
                  //   UserBean user = (UserBean) request.getSession().getAttribute("USER");
 		 SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
@@ -124,7 +125,7 @@ changeOnlineStatus(request);
     }
     
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public String logout(ModelMap model,HttpServletRequest request, HttpServletResponse response, HttpSession HSession) {
+	public  String logout( ModelMap model, HttpServletRequest request,  HttpServletResponse response,  HttpSession HSession) {
 		  try {
 			 
 } catch (Exception e) {
