@@ -57,7 +57,15 @@ a.hiddenanchor{
 	color: rgb(95, 155, 198);
 	text-decoration: underline;
 }
-
+#errorblock {
+	
+	 margin-left:auto;
+margin-right:auto;
+color:red;
+text-align: center;
+font-size: medium;
+border: thin;
+}
 
 #welcomeuser {
 	

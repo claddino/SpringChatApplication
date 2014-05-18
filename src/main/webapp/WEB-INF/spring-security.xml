@@ -8,7 +8,9 @@
 
 
 	<http auto-config="true"  use-expressions="true">
-	    <!-- <intercept-url pattern="*" access="permitAll" /> -->
+	    <session-management>
+        <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+    </session-management>
 		<intercept-url pattern="/login" access="permitAll" />
 			<intercept-url pattern="/resources/**" access="permitAll" />
 			<intercept-url pattern="*.css" access="permitAll" />
@@ -27,7 +29,11 @@
 			username-parameter="username"
 			password-parameter="password" />
 		<!-- From the login page -->
-		<logout logout-success-url="/logout" 
+		
+		<!--  delete-cookies to ensure that the session cookie is cleared and invalidated -->
+		<logout logout-success-url="/logout"
+
+		    delete-cookies="JSESSIONID" 
 		     />
 	</http>
 

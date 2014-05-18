@@ -26,12 +26,7 @@
     <body>
     <body onload='document.f.j_username.focus();'>
 
-	<c:if test="${not empty error}">
-		<div class="errorblock">
-			Your login attempt was not successful, try again.<br /> Caused :
-			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-		</div>
-	</c:if>
+	
         
                 <div class="clr"></div>
             <!--/ Codrops top bar -->
@@ -45,6 +40,12 @@
                         <div id="login" class="animate form">
                             <form name="f" action="<c:url value='j_spring_security_check' />" method="POST">
                                 <h1>Log in</h1> 
+                                <c:if test="${not empty error}">
+		<div class="errorblock" id="errorblock">
+			Your login attempt was not successful, try again.<br /> Caused :
+			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+		</div>
+	</c:if>
                                 <p> 
                                     <label for="username" class="uname" data-icon="u"> Your email or username </label>
                                     <input type="text" value="Rich "name="username" value="" required="required" placeholder="myusername or mymail@mail.com">
@@ -69,7 +70,7 @@
                             </form>
                         </div>
 
-                        
+                        </div>
                   
             
         
