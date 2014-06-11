@@ -21,8 +21,7 @@
 
   <div id="wrapper">
 <div id="registration" class="animate form">
-	<form:form id="form" method="post" modelAttribute="UserBean"
-		cssClass="cleanform">
+	<form:form id="form" action="registrativfsgdfgdfsgsgsgon.htm" method="POST" modelAttribute="UserBean">
 		
 			
 			<c:if test="${not empty message}">
@@ -44,19 +43,7 @@
                                     <form:input  path="passWord"  name="password" required="required" type="password" placeholder="eg. X8df!90EO"/>
                                     
                                 </p>
-		
-		<%-- <fieldset>
-			<legend>Personal Info</legend>
-			<form:label path="userName">
-		  			User :Name <form:errors path="userName" cssClass="error" />
-			</form:label>
-			<form:input path="userName" />
-			<form:label path="passWord">
-		  			Password <form:errors path="passWord" cssClass="error" />
-			</form:label>
-			<form:input path="passWord" />
-
-		</fieldset> --%>
+	
 <p class="signin button"> 
 									<input type="submit" value="Sign up"> 
 									</p>

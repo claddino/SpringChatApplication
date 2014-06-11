@@ -26,21 +26,12 @@ public class UserBean {
                 private String passWord ;
                 
 
-           /*     @Column(name="ENABLED")
-                private int enabled ;
-               
-                public int getEnabled() {
-					return enabled;
-				}
-
-				public void setEnabled(int enabled) {
-					this.enabled = enabled;
-				}*/
+          
 
 				public int getid() {
                     return id;
     }
-                //TODO not sure if get id needed
+             
    
                 public String getUserName() {
                                 return userName;

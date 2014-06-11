@@ -1,14 +1,21 @@
 package ie.claddino.chat.datastore;
 
+import ie.claddino.chat.friend.Friend;
+import ie.claddino.chat.friend.FriendID;
 import ie.claddino.chat.service.UserDatastoreService;
 import ie.claddino.chat.user.UserBean;
 import ie.claddino.chat.user.UsersOnline;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * @author : Richard Downing
@@ -37,13 +47,12 @@ public class UserDatastore implements UserDatastoreService {
 	}
 
 	@Override
-	public UserBean loginByUsernameAndPassword(String username, String password) {
+	public List getUserID(String username) {
 
 		Criteria criteria = sessionFactory.openSession()
 				.createCriteria(UserBean.class)
-				.add(Restrictions.eq("userName", username))
-				.add(Restrictions.eq("passWord", password));
-		return (UserBean) criteria.list().get(0);
+				.add(Restrictions.eq("userName", username));
+		return  criteria.list();
 	}
 
 	@Override
@@ -53,6 +62,67 @@ public class UserDatastore implements UserDatastoreService {
 				.createCriteria(UserBean.class)
 				.add(Restrictions.ne("userName", loggedUserName));
 		return criteria.list();
+
+	}
+	
+	@Override
+	public void getFriendList(String loggedUserName, HttpServletResponse response) {
+		int userID = ((UserBean) getUserID(loggedUserName).get(0)).getid();
+		Criteria friendIdCriteria = sessionFactory.openSession()
+				.createCriteria(Friend.class)
+				.add(Restrictions.eq("userid", userID));
+
+		//List of a users list of friendIds
+		List<Friend> friendlist = (ArrayList<Friend>) friendIdCriteria.list();
+		
+		List<Integer> listFriendIDs =  new ArrayList<Integer>();
+		for(Friend fd: friendlist)
+			listFriendIDs.add(fd.getFriendid().getfriendID());
+
+		Criteria criteria = sessionFactory.openSession()
+				.createCriteria(UserBean.class)
+				.add(Restrictions.in("id", listFriendIDs)
+						);
+		List<Friend> friendNameList =  (List<Friend>) criteria.list();
+		response.setContentType("json");
+		Gson gson = new GsonBuilder().create();
+		try {
+			response.getWriter().write(
+					gson.toJsonTree(friendNameList).getAsJsonArray().toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@Transactional
+	@Override
+	public void addFriend(String friendsname, String loggedUserName) throws Exception {
+	
+		
+		//get Friend ID
+		Criteria friendIdCriteria = sessionFactory.openSession()
+				.createCriteria(UserBean.class)
+				.add(Restrictions.eq("userName", friendsname));
+		int friendID = ((UserBean) getUserID(friendsname).get(0)).getid();
+		int userID = ((UserBean) getUserID(loggedUserName).get(0)).getid();
+		Friend fd =  new Friend();
+		fd.setUserid(userID);
+		fd.setFriendid(new FriendID(friendID));
+		sessionFactory.getCurrentSession().save(fd);
+		
+		/*if (friendid != null) {
+			//Get the current User ID
+List<UserBean> userid =  (List<UserBean>) getUserID(loggedUserName);
+			
+		
+			
+			
+			//fd.setUserid(userid.get(0).getid());	
+			
+			
+		} else {
+			throw new Exception("No Friend ID");
+		}*/
+		
 
 	}
 

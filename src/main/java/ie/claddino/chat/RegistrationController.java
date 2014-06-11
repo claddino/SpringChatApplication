@@ -1,5 +1,6 @@
 package ie.claddino.chat;
 
+import ie.claddino.chat.service.UserDatastoreService;
 import ie.claddino.chat.user.UserBean;
 import ie.claddino.chat.user.UserDAO;
 
@@ -29,8 +30,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/regform")
 @SessionAttributes("UserBean")
 public class RegistrationController {
+	   @Autowired
+	    UserDatastoreService userDatastoreService ;
+	 
+	   
+	    @Autowired private UserDAO userDAO;
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-	@Autowired private UserDAO userDAO;
+	
 	// Invoked on every request
 
 
@@ -44,9 +50,10 @@ public class RegistrationController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void regform() {
+		
 	}
-
-	@RequestMapping(method=RequestMethod.POST)
+	
+	@RequestMapping(value="/registration", method=RequestMethod.POST)
 	public String registrationSubmit(@Valid UserBean user, BindingResult result, 
 								@ModelAttribute("ajaxRequest") boolean ajaxRequest, 
 								Model model, RedirectAttributes redirectAttrs) {

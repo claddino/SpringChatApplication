@@ -1,61 +1,51 @@
-package ie.claddino.chat.contact;
+package ie.claddino.chat.friend;
+import java.io.Serializable;
+
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="CONTACT")
-public class Contact {
+@Table(name="FRIEND")
+public class Friend {
                
+                
+                @Column(name="USERID")
+     
+                private int userid;
                 @Id
-                @Column(name="ID")
-                @GeneratedValue
-                private Integer id;
                
-                @Column(name="FIRSTNAME")
-                private String firstname;
+                @Column(name="FRIENDID")
+                private FriendID friendid;
 
-                @Column(name="LASTNAME")
-                private String lastname;
+				public int getUserid() {
+					return userid;
+				}
 
-                @Column(name="EMAIL")
-                private String email;
+				public void setUserid(int userid) {
+					this.userid = userid;
+				}
+
+				public FriendID getFriendid() {
+					return friendid;
+				}
+				
+				
+
+				public void setFriendid(FriendID friendid) {
+					this.friendid = friendid;
+				}
+
                
-                @Column(name="TELEPHONE")
-                private String telephone;
                
                
-                public String getEmail() {
-                                return email;
-                }
-                public String getTelephone() {
-                                return telephone;
-                }
-                public void setEmail(String email) {
-                                this.email = email;
-                }
-                public void setTelephone(String telephone) {
-                                this.telephone = telephone;
-                }
-                public String getFirstname() {
-                                return firstname;
-                }
-                public String getLastname() {
-                                return lastname;
-                }
-                public void setFirstname(String firstname) {
-                                this.firstname = firstname;
-                }
-                public void setLastname(String lastname) {
-                                this.lastname = lastname;
-                }
-                public Integer getId() {
-                                return id;
-                }
-                public void setId(Integer id) {
-                                this.id = id;
-                }
+               
+                
+            
                
 }

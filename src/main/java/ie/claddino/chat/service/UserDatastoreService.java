@@ -1,9 +1,10 @@
 package ie.claddino.chat.service;
-import ie.claddino.chat.user.UserBean;
-
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.HibernateException;
 
 
 /**
@@ -31,9 +32,9 @@ public interface UserDatastoreService {
                  * @param password
                  * @return
                  */
-                public UserBean loginByUsernameAndPassword(String username, String password);
+                public List getUserID(String name);
                 /**
-                * This is the method to be used to get all users list.
+                * This is the method to be used to get the current user's user ID.
                 */
                 /**
                  * @param loggedUserName
@@ -66,5 +67,25 @@ public interface UserDatastoreService {
                  * @param request
                  */
                 public void changeOnlineStatus(HttpServletRequest request);
+                
+                /**
+                 * This is the method to be used to get Friends object 
+                 */
+                 /**
+                  * @param loggedUserName
+                  * @return
+                 * @throws HibernateException 
+                 * @throws Exception 
+                  */
+                public void addFriend(String friendsname, String loggedUserName) throws  Exception;
+                
+                /**
+                 * This is the method returns a users friends list 
+                 */
+                /**
+                 * @param loggedUserName
+                 * @return
+                 */
+                public void getFriendList(String loggedUserName, HttpServletResponse response);
                 
 }

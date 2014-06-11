@@ -1,7 +1,10 @@
 package ie.claddino.chat.user;
 
 
+import ie.claddino.chat.friend.Friend;
+
 import java.util.List;
+
 
 
 import org.hibernate.Session;
@@ -26,6 +29,12 @@ public class UserDAO {
 		Session session = sessionFactory.getCurrentSession();
 		List users = session.createQuery("from UserBean").list();
 		return users;
+	}
+	
+	@Transactional
+	public void addFriend(Friend friendname) {
+		// Session session = sessionFactory.getCurrentSession();
+		//sessionFactory.getCurrentSession().save(friendname);
 	}
 
 	@Transactional

@@ -25,6 +25,7 @@
 		getOnlineUsers();
 		getAllUsers();
 		getMyMessages();
+		getFriendList();
 		setInterval(function() {
 			getMyMessages();
 		}, 30000);
@@ -37,9 +38,9 @@
 		$("#users").val(string).attr('selected', true);
 		var messageto = $("#users option:selected").val();
 		console.log("Sending message" + messageto);
-	
+
 		$('#writemessage span').text('Sending Message to ' + messageto);
-		
+
 	}
 
 	function sendMessage() {
@@ -52,9 +53,28 @@
 				$("#msgStatus").html(
 						"Message Sent Successfully to "
 								+ $("#users option:selected").val());
-				
+
 				$('#writemessage span').text('Send a Message to: ');
-				$('textarea').val('');	
+				$('textarea').val('');
+			},
+			error : function(e) {
+				alert("error" + e.toSource());
+				$("#msgStatus").html("Error : " + e);
+			}
+		});
+	}
+
+	function addFriend() {
+		$.ajax({
+			type : "POST",
+			url : "addFriend.htm",
+			data : "friendname=" + $("#users option:selected").val(),
+			dataType : "json",
+			success : function() {
+				$("#msgStatus").html(
+						"Message Sent Successfully to "
+								+ $("#users option:selected").val());
+
 			},
 			error : function(e) {
 				alert("error" + e.toSource());
@@ -75,7 +95,7 @@
 							+ result[i].userId + "</font></a>";
 					if (i == 0) {
 						$("#onlineUsers").html(oo);
-						
+
 					} else {
 						$("#onlineUsers").append(", " + oo);
 						$("#onlineUsers").html(oo);
@@ -133,7 +153,7 @@
 							+ "<tr><td>" + result[i].message + "</td></tr>"
 							+ "<tr><td> by : " + result[i].senderName + " on "
 							+ time/* .day+ "/"+time.getMonth+"/"+time.year+" - "+time.hour+
-							                                                                                            ":"+time.min+":"+time.sec */
+														                                                                                            ":"+time.min+":"+time.sec */
 							+ "</td>" + "</tr>" + "</td>" + "</tr>";
 					if (i == 0) {
 						$("#inbox").html(oo);
@@ -170,7 +190,7 @@
 							+ "<tr><td>" + result[i].message + "</td></tr>"
 							+ "<tr><td> by : " + result[i].senderName + " on "
 							+ time/* .day+ "/"+time.getMonth+"/"+time.year+" - "+time.hour+
-							                                                                              ":"+time.min+":"+time.sec */
+														                                                                              ":"+time.min+":"+time.sec */
 							+ "</td>" + "</tr>" + "</td>" + "</tr>";
 					if (i == 0) {
 						$("#inbox").html(oo);
@@ -204,9 +224,9 @@
 							+ "<tr><td>" + result[i].message + "</td></tr>"
 							+ "<tr><td> by : " + result[i].senderName + " on "
 							+ time/* .day+ "/"+time.getMonth+"/"+time.year+" - "+time.hour+
-							                                                                              ":"+time.min+":"+time.sec */
+														                                                                              ":"+time.min+":"+time.sec */
 							+ "</td>" + "</tr>" + "</td>" + "</tr>";
-
+console.log("getMyNextMessagesoo=" + oo);
 					if (i == 0) {
 						$("#inbox").html(oo);
 					} else {
@@ -219,6 +239,33 @@
 			}
 		});
 
+	}
+	
+	function getFriendList() {
+		$.ajax({
+			type : "POST",
+			url : "getFriendList.htm",
+			dataType : "json",
+			success : function(result) {
+
+				console.log("friendlist =" + result);
+
+				for (var i = 0; i < result.length; i++) {
+					
+					
+					var oo =  result[i].userName +"<br>" ;
+				
+					if (i == 0) {
+						$("#friendlist").html(oo);
+					} else {
+						$("#friendlist").append(oo);
+					}
+				}
+			},
+			error : function(e) {
+				alert("error" + e.toSource());
+			}
+		});
 	}
 </script>
 </head>
@@ -253,7 +300,15 @@
 			<td><div id="userlist" align="right"
 					style="text-align: right; vertical-align: top;">
 
-					Select User : <select id="users" name="to"></select> 
+					Select User : <select id="users" name="to"></select> <input
+						type="button" value="Add Friend" onclick="javascript:addFriend();" />
+
+
+					<a href="<c:url value="/form" />" title="user">Users</a><br />
+					<h1>List of All Friends</h1>
+					<div id="friendlist">
+					</div>
+					
 
 				</div></td>
 			<td><div id="writemessage">
@@ -264,29 +319,26 @@
 						<tr bordercolor="blue">
 							<td bgcolor="red">
 								<div id="onlineUsers"></div>
-								
+
 							</td>
 						</tr>
 					</table>
-					<a
-						href="javascript:getOnlineUsers();"><font color="red">Refresh
+					<a href="javascript:getOnlineUsers();"><font color="red">Refresh
 							Online Users List</font> </a>
-					
-		
-		
-		<div id ="sendingmessage">
-		<span>Send a Message to: </span> 
-		</div>
-			
+
+
+
+					<div id="sendingmessage">
+						<span>Send a Message to: </span>
+					</div>
+
 					<form>
 						<table align="center">
 							<tr>
 							<tr>
 								<td><textarea name="message" id="message" COLS="50"
 										ROWS="16"></textarea></td>
-								<td>
-									
-								</td>
+								<td></td>
 							</tr>
 							<tr>
 								<td><input type="button" value="Send Message"
@@ -316,7 +368,7 @@
 										</table>
 									</form>
 								</td>
-								<td>Tour Inbox</td>
+								<td>Your Inbox</td>
 								<td>
 									<form action="getNext.htm">
 										<table>
@@ -360,18 +412,6 @@
 
 		}
 	</script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </body>

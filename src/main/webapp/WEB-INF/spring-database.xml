@@ -13,6 +13,7 @@
 		<property name="username" value="root"/>
     <property name="password" value=""/>
     <!-- <property name="validationQuery" value="SELECT 1"/> -->
+    
 	</bean>
 	
  </beans>
