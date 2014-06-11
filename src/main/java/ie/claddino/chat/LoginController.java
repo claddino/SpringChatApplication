@@ -38,6 +38,7 @@ public class LoginController {
     @RequestMapping(value="/",method = RequestMethod.GET)
 	public String returnuserhome(Model model, HttpServletRequest request, HttpServletResponse response) {
     	changeOnlineStatus(request);
+    	
         	
     		return "userhome";
 		} 
