@@ -24,7 +24,6 @@ public class UserController {
 	 @RequestMapping("/getAllUsers")
      public void getAllUsers(HttpServletRequest request, HttpServletResponse response) {
                     
-                  //   UserBean user = (UserBean) request.getSession().getAttribute("USER");
 SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
                      
                      Authentication auth=ctx.getAuthentication();

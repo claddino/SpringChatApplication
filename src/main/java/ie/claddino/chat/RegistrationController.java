@@ -38,11 +38,6 @@ public class RegistrationController {
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 	
 	// Invoked on every request
-
-
-
-	
-
 	@ModelAttribute("UserBean")
 	public UserBean createUserBean() {
 		return new UserBean();

@@ -1,6 +1,5 @@
 package ie.claddino.chat;
 
-
 import ie.claddino.chat.service.UserDatastoreService;
 import ie.claddino.chat.user.UserDAO;
 
@@ -23,126 +22,111 @@ import org.springframework.web.servlet.ModelAndView;
  * Handles requests for the application home page.
  */
 
-
 @Controller
 public class LoginController {
-    @Autowired
-    UserDatastoreService userDatastoreService ;
- 
-   
-    @Autowired private UserDAO userDAO;
-    
-    
-    
-    //after login button press
-    @RequestMapping(value="/",method = RequestMethod.GET)
-	public String returnuserhome(Model model, HttpServletRequest request, HttpServletResponse response) {
-    	changeOnlineStatus(request);
-    	
-        	
-    		return "userhome";
-		} 
-        
-	
+	@Autowired
+	UserDatastoreService userDatastoreService;
 
-	
- 
-	@RequestMapping(value="/userhome", method = RequestMethod.GET)
-	public  ModelAndView  userhome ( Model model,  HttpServletRequest request,  HttpServletResponse response) {
- 
-changeOnlineStatus(request);
-		  ModelAndView modeluserhome = new ModelAndView();
-		  modeluserhome.addObject("title", "Spring Security Login Form - Database Authentication");
-		  modeluserhome.addObject("message", "This page is for ROLE_ADMIN only!");
-		  modeluserhome.setViewName("userhome");
-		  
-		  
-		  //stops the userhome being cached so that user cant click back after logging out.
-		  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-	        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-	        response.setDateHeader("Expires", 0); // Proxies.
-	        
-	        
-		  return modeluserhome;
-		
-        }
+	@Autowired
+	private UserDAO userDAO;
 
+	// after login button press
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String returnuserhome(Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		changeOnlineStatus(request);
 
+		return "userhome";
+	}
 
+	@RequestMapping(value = "/userhome", method = RequestMethod.GET)
+	public ModelAndView userhome(Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		changeOnlineStatus(request);
+		ModelAndView modeluserhome = new ModelAndView();
+		modeluserhome.addObject("title",
+				"Spring Security Login Form - Database Authentication");
+		modeluserhome.addObject("message", "This page is for ROLE_ADMIN only!");
+		modeluserhome.setViewName("userhome");
+
+		// stops the userhome being cached so that user cant click back after
+		// logging out.
+		response.setHeader("Cache-Control",
+				"no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setDateHeader("Expires", 0); // Proxies.
+
+		return modeluserhome;
+
+	}
 
 	/**
-	 * Called when user is logging in or logging out.
-	 * if user logs in online status will be changed to 1 and to 0 when
-	 *  user is logging out
+	 * Called when user is logging in or logging out. if user logs in online
+	 * status will be changed to 1 and to 0 when user is logging out
 	 */
-	private void changeOnlineStatus( HttpServletRequest request) {
-		SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-		        
-		        Authentication auth=ctx.getAuthentication();
-		        
-		        
-		        //Gets the users name from the principal
-		        String loggedUserName = auth.getName();
-		        System.out.println(loggedUserName +  "authgetname login");
-		        
-		        if (loggedUserName != null) {
-		        	userDatastoreService.changeMyOnlineStatus(loggedUserName,1);
-		        }
-		        else{
-		        	userDatastoreService.changeMyOnlineStatus(loggedUserName,0);
-		        }
+	private void changeOnlineStatus(HttpServletRequest request) {
+		SecurityContext ctx = (SecurityContext) request.getSession()
+				.getAttribute("SPRING_SECURITY_CONTEXT");
+
+		Authentication auth = ctx.getAuthentication();
+
+		// Gets the users name from the principal
+		String loggedUserName = auth.getName();
+		System.out.println(loggedUserName + "authgetname login");
+
+		if (loggedUserName != null) {
+			userDatastoreService.changeMyOnlineStatus(loggedUserName, 1);
+		} else {
+			userDatastoreService.changeMyOnlineStatus(loggedUserName, 0);
+		}
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public  ModelAndView login(@RequestParam(value = "error", required = false)  String error,
-		@RequestParam(value = "logout", required = false)  String logout) {
- 
-	  ModelAndView model = new ModelAndView();
-	  if (error != null) {
-		model.addObject("error", "Invalid username and password!");
-	  }
- 
-	  if (logout != null) {
-		model.addObject("msg", "You've been logged out successfully.");
-	  }
-	  
-	  model.setViewName("login");
- 
-	  return model;
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout) {
+
+		ModelAndView model = new ModelAndView();
+		if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
+
+		model.setViewName("login");
+
+		return model;
 	}
-	
-	 @RequestMapping("/removeonlinestatus")
-	public  void removeonlinestatus( HttpServletRequest request,  HttpServletResponse response) {
-                   
-                 //   UserBean user = (UserBean) request.getSession().getAttribute("USER");
-		 SecurityContext ctx= (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-	        
-	        Authentication auth=ctx.getAuthentication();
-	        
-	        
-	        //Gets the users name from the principal
-	        String loggedUserName = auth.getName();
-       userDatastoreService.changeMyOnlineStatus(loggedUserName,0);
-    }
-    
-	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public  String logout( ModelMap model, HttpServletRequest request,  HttpServletResponse response,  HttpSession HSession) {
-		  try {
-			 
-} catch (Exception e) {
-              e.printStackTrace();
-}
-request.getSession(true).invalidate();
 
+	@RequestMapping("/removeonlinestatus")
+	public void removeonlinestatus(HttpServletRequest request,
+			HttpServletResponse response) {
 
+		SecurityContext ctx = (SecurityContext) request.getSession()
+				.getAttribute("SPRING_SECURITY_CONTEXT");
+
+		Authentication auth = ctx.getAuthentication();
+
+		// Gets the users name from the principal
+		String loggedUserName = auth.getName();
+		userDatastoreService.changeMyOnlineStatus(loggedUserName, 0);
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(ModelMap model, HttpServletRequest request,
+			HttpServletResponse response, HttpSession HSession) {
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		request.getSession(true).invalidate();
 
 		return "login";
- 
-	}
-	
-                  
-     
-     
 
 	}
 
+}

@@ -42,8 +42,11 @@ public class LoginTestCase {
     private MockMvc mockMvc;
 
     private final String SECURED_URI = "/";
+   
 
     private final String LOGIN_PAGE_URL = "http://localhost/login";
+    
+    private static SecurityContext securityContext = userAuthentication();
 
     @Before
     public void setUp() throws Exception {
@@ -61,18 +64,33 @@ public class LoginTestCase {
 
     @Test
     public void itShouldAllowAccessToSecuredPageForPermittedUser() throws Exception {
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken("Rich", "rich");
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
+        SecurityContext securityContext = userAuthentication();
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(
-                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                securityContext);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
+        mockMvc.perform(get(SECURED_URI).session(session))
+                .andExpect(status().isOk()).andExpect(redirectedUrl(LOGIN_PAGE_URL));
+    }
+    
+    @Test
+    public void itShouldReturnListOfUserFriends() throws Exception {
+      
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
         mockMvc.perform(get(SECURED_URI).session(session))
                 .andExpect(status().isOk());
+        
     }
+
+	protected static SecurityContext userAuthentication() {
+		Authentication authentication =
+                new UsernamePasswordAuthenticationToken("Rich", "rich");
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+		return securityContext;
+	}
 
 }
